@@ -19,6 +19,9 @@ pub fn getZon(T: type, zon: anytype) T {
             return ret;
         },
         .@"union" => {
+            if (@typeInfo(@TypeOf(zon)) == .enum_literal) {
+                return zon;
+            }
             // unions have the same syntax as structs so we have to convert
             const field = @typeInfo(@TypeOf(zon)).@"struct".fields[0];
             return @unionInit(T, field.name, field.defaultValue().?);
